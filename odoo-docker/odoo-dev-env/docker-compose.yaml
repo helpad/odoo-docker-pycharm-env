@@ -1,0 +1,59 @@
+version: '3.8'
+services:
+  odoo:
+    image: odoo:16.0
+    ports:
+      - "8069:8069"
+    environment:
+      - HOST=db
+      - USER=odoo
+      - PASSWORD=odoo
+    volumes:
+      - odoo-addons:/mnt/extra-addons
+      - odoo-data:/var/lib/odoo
+    depends_on:
+      - db
+    entrypoint: ["/entrypoint.sh", "odoo", "--dev=all", "--log-level=debug"]
+  odoo-debug:
+    image: odoo:dev
+    ports:
+      - "8070:8069"
+    environment:
+      - HOST=db
+      - USER=odoo
+      - PASSWORD=odoo
+    volumes:
+      - odoo-addons:/mnt/extra-addons
+      - odoo-data:/var/lib/odoo
+    depends_on:
+      - db
+    entrypoint: [ "/entrypoint.sh", "odoo", "--dev=all", "--log-level=debug" ]
+  db:
+    image: postgres:15
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=odoo
+      - POSTGRES_USER=odoo
+      - POSTGRES_DB=postgres
+    volumes:
+      - db-data:/var/lib/postgresql/data
+volumes:
+  odoo-addons:
+    driver: local
+    driver_opts:
+      type: none
+      device: ../../odoo-addons
+      o: bind
+  db-data:
+    driver: local
+    driver_opts:
+      type: none
+      device: ../../odoo-data/db-data
+      o: bind
+  odoo-data:
+    driver: local
+    driver_opts:
+      type: none
+      device: ../../odoo-data/odoo-data
+      o: bind
