@@ -51,11 +51,15 @@ docker-compose up -d
 ```
 
 ### Configure postgresql datasource
+
 ![img.png](images/datasource.png)
 
 with a demo database
+
 ![img.png](images/demo-database.png)
 
 introspecting the database
+
 ![img.png](images/introspecting-db.png)
+
 ![img.png](images/query-console.png)
